@@ -3,27 +3,42 @@
 #include <string.h>
 #include <math.h>
 
-const int num_vals =1000000*log(1000000)*1.15; //Total number of values to look at
-int primeList[1000000]; //We want millionth prime number
-int *integers = (int *)malloc(num_vals * 2 * sizeof(int));
+//const int num_vals =1000000*log(1000000)*1.15; //Total number of values to look at
+//int primeList[1000000]; //We want millionth prime number
+//int *integers = calloc(num_vals, sizeof(int));
+/*Note: I gave up on trying a 2D array.  I can't seem to have gotten it working.*/
 
 
+int sieve(int target_prime){
+  int num_vals = target_prime*log(target_prime)*1.15;
+  int * integers = calloc(num_vals, sizeof(int));
+  for (int i = 2; i < num_vals; i++){
+    integers[i] = 1;
+  }
 
+  for (int i = 2; i < num_vals; i++){
+    if (*(integers + i)){
+      target_prime--;
+      if (target_prime == 0){
+	free(integers);
+	return i;
+      }
+      for (int j = i; j < num_vals; j = j + i){
+	if (*(integers+j)){
+	  *(integers+j) = 0;
+	}
+      }
+
+    }
+  }
+  free(integers);
+  return 0;
+}
+    
+  
 void initialize(){
-  for (int i = 2; i < numVals; i++){
-    integers[i][0] = i;
-    integers[i][1] = 0;
-    //0 = Unchecked
-    //1 = Prime
-    //2 = Composite
-  }
 }
 
-void print_array(int n){
-  for (int i = 0; i < n; i++){
-    printf("Number: %d \n Value: %d",integers[i][0],integers[i][1]);
-  }
-}
 /*
 void calc_primes(){
   int primeNo = 0;
@@ -33,18 +48,8 @@ void calc_primes(){
       integers[i*j][1] = 2;
     }
   }
-  for (int i = 2; i < numVals; i++){
-    if (integers[i][1] != 2){
-      integers[i][1] = 1;
-      primeList[primeNo] = integers[i][0];
-      primeNo++;
-    }
-  }
-}
-*/
+  for (int i = 2;*/
 int main(){
-  //Testing Initialize
-  initialize();
-  print_array(20);
+  printf("%d\n",sieve(1000000));
   return 0;
 }
